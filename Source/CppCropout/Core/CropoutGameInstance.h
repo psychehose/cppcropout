@@ -21,8 +21,7 @@ public:
 
 	virtual void Init() override;
 
-
-	// Save, Load 추후 구현
+	// #HoseTodo: - Save, Load 추후 구현
 
 	//UFUNCTION()
 	//void LoadGame();
@@ -44,11 +43,24 @@ public:
 	UFUNCTION()
 	double GetStartGameOffset();
 
+	// Open a level
+	UFUNCTION()
+	void OpenLevel(TSoftObjectPtr<UWorld> Level);
+
+
+private:
+	void OpenLevel_Internal(TSoftObjectPtr<UWorld> Level);
+
+
+	FTimerHandle OpenLevelTimerHandle;
+
+
 private:
 	double StartGameOffset;
 
 	UPROPERTY()
-	class UUserWidget* UI_Transition;
+    TSubclassOf<class UUI_Transition> UI_TransitionClass;
 
-	
+	UPROPERTY()
+	TObjectPtr<class UUI_Transition> UI_Transition;
 };

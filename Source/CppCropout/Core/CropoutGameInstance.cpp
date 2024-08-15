@@ -3,35 +3,47 @@
 
 #include "Core/CropoutGameInstance.h"
 #include "Blueprint/UserWidget.h"
+#include "Kismet/GameplayStatics.h"
+
+#include "UI/UI_Transition.h"
 
 UCropoutGameInstance::UCropoutGameInstance()
 {
+	StartGameOffset = 0.0f;
+
+    static ConstructorHelpers::FClassFinder<UUI_Transition> TransitionWidgetClassFinder(TEXT("/Game/UI/UI_Transition"));
+    if (TransitionWidgetClassFinder.Succeeded())
+    {
+        TSubclassOf<UUserWidget> TransitionWidgetClass = TransitionWidgetClassFinder.Class;
+    }
 }
 
 void UCropoutGameInstance::Init()
 {
 	Super::Init();
 
-	// Crate UI_Transition
-    static ConstructorHelpers::FClassFinder<UUserWidget> TransitionWidgetClassFinder(TEXT("/Game/UI/UI_Transition"));
-    if (TransitionWidgetClassFinder.Succeeded())
-    {
-        TSubclassOf<UUserWidget> TransitionWidgetClass = TransitionWidgetClassFinder.Class;
-        if (TransitionWidgetClass != nullptr)
-        {
-            // Create the UI_Transition widget
-            UI_Transition = CreateWidget<UUserWidget>(this, TransitionWidgetClass);
-            if (UI_Transition)
-            {
-                // we can Add the UI_Transition widget to the viewport
-            }
-        }
-    }
-
 }
 
 void UCropoutGameInstance::TransitionIn()
 {
+
+    if (!UI_Transition && UI_TransitionClass)
+    {
+		UI_Transition = CreateWidget<UUI_Transition>(this, UI_TransitionClass);
+    }
+
+
+    if (UI_Transition)
+    {
+        if (!UI_Transition->IsInViewport())
+        {
+			UI_Transition->AddToViewport();
+		}
+
+        // Animate the transition in
+
+        UI_Transition->TransitionIn();
+    }
 }
 
 void UCropoutGameInstance::TransitionOut()
@@ -46,4 +58,20 @@ void UCropoutGameInstance::SetStartGameOffset(double InGameTime)
 double UCropoutGameInstance::GetStartGameOffset()
 {
 	return StartGameOffset;
+}
+
+void UCropoutGameInstance::OpenLevel(TSoftObjectPtr<UWorld> Level)
+{
+    TransitionIn();
+
+    GetWorld()->GetTimerManager().SetTimer(OpenLevelTimerHandle, [this, Level]()
+    {
+		OpenLevel_Internal(Level);
+	}, 1.1f, false);
+    
+}
+
+void UCropoutGameInstance::OpenLevel_Internal(TSoftObjectPtr<UWorld> Level)
+{
+    UGameplayStatics::OpenLevelBySoftObjectPtr(this, Level, true);
 }
