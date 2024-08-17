@@ -19,5 +19,10 @@ public:
 	void TransitionIn();
 	UFUNCTION(BlueprintImplementableEvent, Category = "Transition")
 	void TransitionOut();
+
+
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+	TObjectPtr<class UCommonTextBlock> Loading_TextBlock;
+
 	
 };

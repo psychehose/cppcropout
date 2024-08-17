@@ -10,7 +10,7 @@ public class CppCropout : ModuleRules
 
         PublicIncludePaths.AddRange(new string[] { "CppCropout" });
 
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG" });
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "CommonUI" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
