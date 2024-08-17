@@ -16,50 +16,37 @@ class CPPCROPOUT_API UCropoutGameInstance : public UGameInstance
 
 
 public:
-	UCropoutGameInstance();
+	UCropoutGameInstance(const FObjectInitializer& ObjectInitializer);
 
 
 	virtual void Init() override;
 
-	// #HoseTodo: - Save, Load 추후 구현
-
-	//UFUNCTION()
-	//void LoadGame();
-
-
-	// Transition the game instance in
-	UFUNCTION()
-	void TransitionIn();
-
-	// Transition the game instance out
-	UFUNCTION()
-	void TransitionOut();
-
 	// Set the start game offset
-	UFUNCTION()
 	void SetStartGameOffset(double InGameTime);
 
 	// Get the start game offset
-	UFUNCTION()
 	double GetStartGameOffset();
 
 	// Open a level
-	UFUNCTION()
 	void OpenLevel(TSoftObjectPtr<UWorld> Level);
+
+	// Transition the game instance in
+	void TransitionIn();
+
+	// Transition the game instance out
+	void TransitionOut();
 
 
 private:
 	void OpenLevel_Internal(TSoftObjectPtr<UWorld> Level);
 
-
 	FTimerHandle OpenLevelTimerHandle;
-
 
 private:
 	double StartGameOffset;
 
 	UPROPERTY()
-    TSubclassOf<class UUI_Transition> UI_TransitionClass;
+	TSubclassOf<class UUI_Transition> UI_TransitionClass;
 
 	UPROPERTY()
 	TObjectPtr<class UUI_Transition> UI_Transition;

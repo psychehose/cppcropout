@@ -20,16 +20,10 @@ public:
 	virtual void BeginPlay() override;
 
 private:
-
-	// Transition the game mode in
-	UFUNCTION()
-	void TransitionOut();
 	
 	// Set the start game offset
-	UFUNCTION()
 	void SetStartGameOffset();
 
-	UFUNCTION()
 	void ClearRenderTarget();
 	
 	UPROPERTY()

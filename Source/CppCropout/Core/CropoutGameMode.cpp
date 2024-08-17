@@ -13,21 +13,17 @@ ACropoutGameMode::ACropoutGameMode()
 
 void ACropoutGameMode::BeginPlay()
 {
+	UE_LOG(LogTemp, Warning, TEXT("ACropoutGameMode::BeginPlay()"));
 	Super::BeginPlay();
 
 	GameInstance = Cast<UCropoutGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 
-	TransitionOut();
-}
-
-void ACropoutGameMode::TransitionOut()
-{
-	if (GameInstance)
-	{
-		GameInstance->TransitionOut();
-	}
+	GameInstance->TransitionOut();
 
 	SetStartGameOffset();
+
+	ClearRenderTarget();
+
 }
 
 void ACropoutGameMode::SetStartGameOffset()
@@ -37,8 +33,6 @@ void ACropoutGameMode::SetStartGameOffset()
 		double GameTime = UGameplayStatics::GetTimeSeconds(GetWorld());
 		GameInstance->SetStartGameOffset(GameTime);
 	}
-
-	ClearRenderTarget();
 }
 
 void ACropoutGameMode::ClearRenderTarget()
